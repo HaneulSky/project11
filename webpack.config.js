@@ -25,18 +25,9 @@ module.exports = {
       },
 
       {
-        test: /\.(jpg|gif|png|jpeg|svg|webp|ico)$/i,
-        use: [
-            'file-loader?name=../images/[name].[ext]&esModule=false', // указали папку, куда складывать изображения,
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              bypassOnDebug: true, // webpack@1.x
-              disable: true, // webpack@2.x and newer
-            },
-          },
-        ],
-      },
+        test: /\.(jpg|jpeg|png|svg|webp)$/,
+        use: 'file-loader?name=./images/[name].[ext]&esModule=false'
+    },
       {
         test: /\.(eot|ttf|woff|woff2)$/,
         loader: 'file-loader?name=./vendor/[name].[ext]'
@@ -45,27 +36,32 @@ module.exports = {
         test: /\.css$/i,
         use: [
                         (isDev ? 'style-loader' : MiniCssExtractPlugin.loader),
-                        'css-loader', 
+                        {
+                            loader:'css-loader',
+                            options: {
+                                importLoaders: 2
+                            } 
+                        }, 
                         'postcss-loader'
                 ]
 },
     ]
   },
-  plugins: [
-    new MiniCssExtractPlugin({ // 
-      filename: 'style.[contenthash].css',
+    plugins: [
+      new MiniCssExtractPlugin({ // 
+        filename: 'style.[contenthash].css',
     }),
-    new HtmlWebpackPlugin({
-      inject: false,
-      template: './src/index.html',
-      filename: 'index.html'
+      new HtmlWebpackPlugin({
+        inject: false,
+        template: './src/index.html',
+        filename: 'index.html'
     }),
-    new WebpackMd5Hash(),
-    new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
+      new WebpackMd5Hash(),
+      new CleanWebpackPlugin(),
+      new webpack.DefinePlugin({
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
-    new OptimizeCssAssetsPlugin({
+      new OptimizeCssAssetsPlugin({
         assetNameRegExp: /\.css$/g,
         cssProcessor: require('cssnano'),
         cssProcessorPluginOptions: {
