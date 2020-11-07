@@ -1,0 +1,7 @@
+.popup__container{
+        max-width: 80vw;
+        max-height: 80vh;
+        border-radius: 0px;
+        position: relative;
+        padding-left: calc((100vw - 80vw) / 2);
+      }
